@@ -558,54 +558,28 @@ Real Xpuro — Sistema de Verificação
 export function iniciarServidorVerificacao() {
 
   const server = http.createServer((req, res) => {
+  const url = new URL(req.url, `http://localhost:${PORTA}`);
 
-    const url = new URL(
-      req.url,
-      `http://localhost:${PORTA}`
-    );
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
 
-    const token = url.searchParams.get("token");
+  const nome = url.searchParams.get("nome");
+  const avatar = url.searchParams.get("avatar");
 
-    res.setHeader(
-      "Content-Type",
-      "text/html; charset=utf-8"
-    );
+  if (!nome || !avatar) {
+    res.writeHead(404);
+    return res.end(buildPaginaErro());
+  }
 
-    if (!token || !tokens.has(token)) {
+  res.writeHead(200);
 
-      res.writeHead(404);
-
-      return res.end(
-        buildPaginaErro()
-      );
-    }
-
-    const dados = tokens.get(token);
-
-    if (Date.now() > dados.expira) {
-
-      tokens.delete(token);
-
-      res.writeHead(410);
-
-      return res.end(
-        buildPaginaErro()
-      );
-    }
-
-    tokens.delete(token);
-
-    res.writeHead(200);
-
-    res.end(
-      buildPaginaVerificado(
-        dados.nome,
-        dados.avatar,
-        new Date().getFullYear()
-      )
-    );
-
-  });
+  return res.end(
+    buildPaginaVerificado(
+      nome,
+      avatar,
+      new Date().getFullYear()
+    )
+  );
+});
 
     server.listen(PORTA, "0.0.0.0", () => {
     console.log(
