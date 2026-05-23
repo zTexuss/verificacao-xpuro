@@ -392,7 +392,7 @@ h1 span{
 
 </div>
 
-<a class="btn" href="https://discord.gg/SEU_INVITE_AQUI">
+<a class="btn" href="https://discord.gg/R9tbFp8nCH">
   Voltar para o Discord
 </a>
 
@@ -532,7 +532,7 @@ p{
 </div>
 
 <h1>
-Link Inválido
+  Link <span>Inválido</span>
 </h1>
 
 <p>
