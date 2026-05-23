@@ -1,6 +1,6 @@
 import http from "http";
 
-const PORTA = process.env.PORT || 3000;
+const PORTA = 3000;
 
 // ══════════════════════════════════════════════════════
 // PÁGINA SUCESSO
