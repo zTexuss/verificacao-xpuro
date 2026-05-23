@@ -607,9 +607,11 @@ export function iniciarServidorVerificacao() {
 
   });
 
-  server.listen(PORTA, "0.0.0.0", () => {
+    server.listen(PORTA, "0.0.0.0", () => {
     console.log(
       `✅ Servidor de verificação iniciado na porta ${PORTA}`
     );
   });
 }
+
+iniciarServidorVerificacao();
