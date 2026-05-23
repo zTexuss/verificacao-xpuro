@@ -1,27 +1,10 @@
 import http from "http";
 
-const PORTA = 3000;
+const PORTA = process.env.PORT || 3000;
 
-const tokens = new Map();
-
-export function gerarToken(userId, nome, avatar) {
-
-  const token = Math.random()
-    .toString(36)
-    .slice(2, 10)
-    .toUpperCase();
-
-  const expira = Date.now() + 5 * 60 * 1000;
-
-  tokens.set(token, {
-    userId,
-    nome,
-    avatar,
-    expira
-  });
-
-  return token;
-}
+// ══════════════════════════════════════════════════════
+// PÁGINA SUCESSO
+// ══════════════════════════════════════════════════════
 
 function buildPaginaVerificado(nome, avatar, ano) {
 
@@ -406,6 +389,10 @@ h1 span{
 </html>`;
 }
 
+// ══════════════════════════════════════════════════════
+// PÁGINA ERRO
+// ══════════════════════════════════════════════════════
+
 function buildPaginaErro() {
 
   return `<!DOCTYPE html>
@@ -555,33 +542,44 @@ Real Xpuro — Sistema de Verificação
 </html>`;
 }
 
+// ══════════════════════════════════════════════════════
+// SERVIDOR HTTP
+// ══════════════════════════════════════════════════════
+
 export function iniciarServidorVerificacao() {
 
   const server = http.createServer((req, res) => {
-  const url = new URL(req.url, `http://localhost:${PORTA}`);
 
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
+    const url = new URL(
+      req.url,
+      `http://localhost:${PORTA}`
+    );
 
-  const nome = url.searchParams.get("nome");
-  const avatar = url.searchParams.get("avatar");
+    res.setHeader(
+      "Content-Type",
+      "text/html; charset=utf-8"
+    );
 
-  if (!nome || !avatar) {
-    res.writeHead(404);
-    return res.end(buildPaginaErro());
-  }
+    const nome = url.searchParams.get("nome");
+    const avatar = url.searchParams.get("avatar");
 
-  res.writeHead(200);
+    if (!nome || !avatar) {
+      res.writeHead(404);
+      return res.end(buildPaginaErro());
+    }
 
-  return res.end(
-    buildPaginaVerificado(
-      nome,
-      avatar,
-      new Date().getFullYear()
-    )
-  );
-});
+    res.writeHead(200);
 
-    server.listen(PORTA, "0.0.0.0", () => {
+    return res.end(
+      buildPaginaVerificado(
+        nome,
+        avatar,
+        new Date().getFullYear()
+      )
+    );
+  });
+
+  server.listen(PORTA, "0.0.0.0", () => {
     console.log(
       `✅ Servidor de verificação iniciado na porta ${PORTA}`
     );
