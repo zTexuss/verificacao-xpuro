@@ -526,7 +526,7 @@ p{
     Faça a verificação para liberar o acesso.
   </p>
 
-  <a class="btn" href="https://verificacao-xpuro.onrender.com">
+  <a class="btn" href="https://discord.gg/R9tbFp8nCH">
     Fazer verificação
   </a>
 
