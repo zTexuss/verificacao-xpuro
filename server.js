@@ -390,6 +390,155 @@ h1 span{
 }
 
 // ══════════════════════════════════════════════════════
+// PÁGINA VERIFICAÇÃO
+// ══════════════════════════════════════════════════════
+function buildPaginaSemVerificacao(nome = "Usuário", avatar = "", ano) {
+  const avatarFinal = avatar || "https://cdn.discordapp.com/embed/avatars/0.png";
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sem Verificação — Real Xpuro</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --purple:#7c3aed;
+  --purple-light:#a855f7;
+  --purple-soft:#c084fc;
+  --bg:#050505;
+  --text:#f1f1f1;
+  --muted:#8b8b8b;
+  --border:rgba(168,85,247,.25);
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top,rgba(124,58,237,.20),transparent 38%),
+    radial-gradient(circle at bottom,rgba(168,85,247,.10),transparent 35%),
+    var(--bg);
+  font-family:"DM Sans",sans-serif;
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.card{
+  width:100%;
+  max-width:470px;
+  padding:46px 40px;
+  border:1px solid var(--border);
+  border-radius:24px;
+  background:rgba(255,255,255,.035);
+  backdrop-filter:blur(22px);
+  box-shadow:0 25px 80px rgba(0,0,0,.45);
+  text-align:center;
+}
+
+.avatar{
+  width:86px;
+  height:86px;
+  margin:0 auto 22px;
+  border-radius:50%;
+  border:2px solid rgba(168,85,247,.35);
+  overflow:hidden;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.status{
+  display:inline-flex;
+  padding:6px 14px;
+  border:1px solid rgba(168,85,247,.28);
+  border-radius:999px;
+  background:rgba(168,85,247,.10);
+  color:var(--purple-soft);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
+
+h1{
+  font-family:"Bebas Neue",sans-serif;
+  font-size:42px;
+  letter-spacing:2px;
+  line-height:1;
+  margin-bottom:12px;
+}
+
+h1 span{color:var(--purple-soft)}
+
+p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.8;
+  margin-bottom:26px;
+}
+
+.btn{
+  display:inline-block;
+  padding:13px 28px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#6d28d9,#7c3aed,#a855f7);
+  color:#fff;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:800;
+}
+
+.footer{
+  margin-top:22px;
+  color:#494949;
+  font-size:11px;
+}
+</style>
+</head>
+
+<body>
+<main class="card">
+  <div class="avatar">
+    <img src="${avatarFinal}" alt="Avatar">
+  </div>
+
+  <div class="status">Verificação pendente</div>
+
+  <h1>
+    Acesso <span>Bloqueado</span>
+  </h1>
+
+  <p>
+    Olá, <strong style="color:#fff">${nome}</strong>.<br>
+    Sua conta ainda não possui verificação ativa na Real Xpuro.
+    Faça a verificação para liberar o acesso.
+  </p>
+
+  <a class="btn" href="https://verificacao-xpuro.onrender.com">
+    Fazer verificação
+  </a>
+
+  <div class="footer">
+    Real Xpuro © ${ano} — Sistema de Verificação
+  </div>
+</main>
+</body>
+</html>`;
+}
+
+// ══════════════════════════════════════════════════════
 // PÁGINA ERRO
 // ══════════════════════════════════════════════════════
 
@@ -562,6 +711,20 @@ export function iniciarServidorVerificacao() {
 
     const nome = url.searchParams.get("nome");
     const avatar = url.searchParams.get("avatar");
+
+    const status = url.searchParams.get("status");
+
+    if (status === "pendente" || status === "sem-verificacao") {
+      res.writeHead(200);
+
+      return res.end(
+        buildPaginaSemVerificacao(
+          nome || "Usuário",
+          avatar || "",
+          new Date().getFullYear()
+        )
+      );
+    }
 
     if (!nome || !avatar) {
       res.writeHead(404);
