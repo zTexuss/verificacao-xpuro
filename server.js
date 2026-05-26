@@ -735,7 +735,7 @@ export function iniciarServidorVerificacao() {
     const returnUrl =
       url.searchParams.get("return_url") ||
       url.searchParams.get("redirect_url") ||
-      "https://discord.gg/R9tbFp8nCH";
+      "http://localhost:5500/perfil.html?status=verified";
 
     if (!nome || !avatar) {
       res.writeHead(404);
