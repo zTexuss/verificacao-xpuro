@@ -6,7 +6,7 @@ const PORTA = 3000;
 // PÁGINA SUCESSO
 // ══════════════════════════════════════════════════════
 
-function buildPaginaVerificado(nome, avatar, ano) {
+function buildPaginaVerificado(nome, avatar, ano, returnUrl) {
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -385,6 +385,12 @@ h1 span{
 
 </main>
 
+<script>
+  setTimeout(() => {
+    window.location.href = "${returnUrl}";
+  }, 2200);
+</script>
+
 </body>
 </html>`;
 }
@@ -726,6 +732,11 @@ export function iniciarServidorVerificacao() {
       );
     }
 
+    const returnUrl =
+      url.searchParams.get("return_url") ||
+      url.searchParams.get("redirect_url") ||
+      "https://discord.gg/R9tbFp8nCH";
+
     if (!nome || !avatar) {
       res.writeHead(404);
       return res.end(buildPaginaErro());
@@ -737,7 +748,8 @@ export function iniciarServidorVerificacao() {
       buildPaginaVerificado(
         nome,
         avatar,
-        new Date().getFullYear()
+        new Date().getFullYear(),
+        returnUrl
       )
     );
   });
